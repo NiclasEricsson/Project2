@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<title>Project 2 by Niclas Ericsson</title>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 <style>
 body{
 	overflow-x: hidden;
@@ -19,8 +20,9 @@ h4 {
 p{
 	font-family: 'Open Sans', sans-serif;
 	text-align: center;
+	margin: 100px;
 	color: #999;
-	top: 1100px;
+	top: 985px;
 	position: relative;
 }
 a{
@@ -41,7 +43,8 @@ circle:hover{
   transition:.5s;
 }
 circle{
-    filter: drop-shadow( 1px 1px 1px #000 );
+    -webkit-filter: drop-shadow( 1px 1px 1px #000 );
+	filter: drop-shadow( 1px 1px 1px #000 );
 }
 path{
 	fill: transparent;
@@ -54,8 +57,8 @@ text{
 }
 </style>
 <body>
-<script src="http://d3js.org/d3.v3.min.js"></script>
-<h1>The Feeling of Happiness and the State of Health</h1>
+<script src="d3.v3.min.js"></script>
+<h1>The Feeling of Happiness and the State of Health 2010-2014</h1>
 <h4>By Niclas Ericsson | Data from <a href="http://www.worldvaluessurvey.org/">WVS</a></h4>
 
 <script>
@@ -78,7 +81,7 @@ d3.tsv("data/data.tsv", function(data) {
 		shape.setAttribute("r",  (+data[n].veryGoodHealth+28));
 		shape.setAttribute("fill", "#f7ddcb");
 		shape.setAttribute("onmouseover", "evt.target.setAttribute('r', '" + (+data[n].veryGoodHealth+30) + "')");
-		shape.setAttribute("onclick", "alert('Very happy: " + data[n].veryHappy + "%\\nRather happy: " + data[n].ratherHappy + "%\\nNot very happy: " + data[n].notVeryHappy + "%\\nNot at all happy: " + data[n].notAtAllHappy + "%\\n\\nVery good health: " + data[n].veryGoodHealth + "%\\nGood health: " + data[n].goodHealth + "%\\nFair health: " + data[n].fairHealth + "%\\nPoor health: " + data[n].poorHealth + "%')");
+		shape.setAttribute("onclick", "alert('Statistics for " + data[n].country + " (" + data[n].totalVotes + " votes in total)\\n\\nVery happy: " + data[n].veryHappy + "%\\nRather happy: " + data[n].ratherHappy + "%\\nNot very happy: " + data[n].notVeryHappy + "%\\nNot at all happy: " + data[n].notAtAllHappy + "%\\nNo answer or don´t know: " + (+data[n].noAnswerHappy + +data[n].dontKnowHappy) + "%\\n\\nVery good health: " + data[n].veryGoodHealth + "%\\nGood health: " + data[n].goodHealth + "%\\nFair health: " + data[n].fairHealth + "%\\nPoor health: " + data[n].poorHealth + "%\\nNo answer or don´t know: " + (+data[n].noAnswerHealth + +data[n].dontKnowHealth) + "%')");
 		shape.setAttribute("onmouseout", "evt.target.setAttribute('r', '" + (+data[n].veryGoodHealth+28) + "')");
 		svg.appendChild(shape);
 
@@ -150,6 +153,10 @@ d3.tsv("data/data.tsv", function(data) {
 
 </script>
 
-<p>heej</p>
+<p>The size of the head depends on the state of health for the specific country. The smile on the other hand depends on the feeling of happiness.
+By looking at them both, one can see correlations between the two sets of data. Click on the heads to view statistics for that specific country.
+<br/>
+<br/>
+More details (including my analytic trail) can be found <a href="details.html">here</a>.</p>
 
 </html>
