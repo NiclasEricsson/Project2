@@ -2,30 +2,46 @@
 <meta charset="utf-8">
 <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 <style>
+body{
+	overflow-x: hidden;
+}
 h1 {
 	font-family: 'Open Sans', sans-serif;
 	text-align: center;
-	color: #1F77B4;
+	color: #BAF0F7;
 }
 h4 {
 	font-family: 'Open Sans', sans-serif;
 	text-align: center;
 	color: #999;
+	margin-top: 30px;
 }
-#container {
-	position: absolute;
-	width: 1000px;
-	height: 600px;
-	top: 50px;
-	left: 150px;
+p{
+	font-family: 'Open Sans', sans-serif;
+	text-align: center;
+	color: #999;
+	top: 1100px;
+	position: relative;
+}
+a{
+	color: #999;
 }
 svg{
 	position: absolute;
-	top: 100px;
+	top: 150px;
 	width: 100%;
 }
 circle:hover{
 	fill: #E8CCBA;
+	cursor:pointer;
+	-o-transition:.5s;
+  -ms-transition:.5s;
+  -moz-transition:.5s;
+  -webkit-transition:.5s;
+  transition:.5s;
+}
+circle{
+    filter: drop-shadow( 1px 1px 1px #000 );
 }
 path{
 	fill: transparent;
@@ -33,182 +49,98 @@ path{
 }
 text{
 	font-family: 'Open Sans', sans-serif;
-	color: #999;
-	text-align: center;
-    position:relative;
-    cursor:pointer;
+	fill: #999;
+	text-anchor: middle;
 }
-text:hover span{
-    display:block;
-}
-
-
-
-span{
-    background: none repeat scroll 0 0 #F8F8F8;
-    border: 5px solid #DFDFDF;
-    color: #717171;
-    font-size: 13px;
-    height: 30px;
-    letter-spacing: 1px;
-    line-height: 30px;
-    margin: 0 auto;
-    position: relative;
-    text-align: center;
-    text-transform: uppercase;
-    top: -80px;
-    left:-30px;
-    display:none;
-    padding:0 20px;
-	z-index: 9999;
-}
-span:after{
-    content:'';
-    position:absolute;
-    bottom:-10px;
-    width:10px;
-    height:10px;
-    border-bottom:5px solid #dfdfdf;
-    border-right:5px solid #dfdfdf;
-    background:#f8f8f8;
-    left:50%;
-    margin-left:-5px;
-    -moz-transform:rotate(45deg);
-    -webkit-transform:rotate(45deg);
-    transform:rotate(45deg);
-}
-p{
-    margin:100px;
-    float:left;
-    position:relative;
-    cursor:pointer;
-}
-
-p:hover span{
-    display:block;
-}
-
-
-
 </style>
 <body>
 <script src="http://d3js.org/d3.v3.min.js"></script>
-<h1>Project 2 - Blablabla</h1>
-<h4>By Niclas Ericsson</h4>
-
-<!-- <div id="container"></div> -->
-
-<!-- <p>Hover here<span>some text here ?</span></p> -->
+<h1>The Feeling of Happiness and the State of Health</h1>
+<h4>By Niclas Ericsson | Data from <a href="http://www.worldvaluessurvey.org/">WVS</a></h4>
 
 <script>
 
-/*var countrycodes = { 8: {code: "ALB", name: "Albania"}, 12: {code: "DZA", name: "Algeria"}, 16: {code: "ASM", name: "American Samoa"}, 20: {code: "AND", name: "Andorra"}, 24: {code: "AGO", name: "Angola"}, 28: {code: "ATG", name: "Antigua"}, 31: {code: "AZE", name: "Azerbaijan"}, 32: {code: "ARG", name: "Argentina"}, 36: {code: "AUS", name: "Australia"}, 40: {code: "AUT", name: "Austria"}, 48: {code: "BHR", name: "Bahrain"}, 50: {code: "BGD", name: "Bangladesh"}, 51: {code: "ARM", name: "Armenia"}, 52: {code: "BRB", name: "Barbados"}, 56: {code: "BEL", name: "Belgium"}, 60: {code: "BMU", name: "Bermuda"}, 64: {code: "BTN", name: "Bhutan"}, 68: {code: "BOL", name: "Bolivia"}, 70: {code: "BIH", name: "Bosnia"}, 72: {code: "BWA", name: "Botswana"}, 76: {code: "BRA", name: "Brazil"}, 84: {code: "BLZ", name: "Belize"}, 100: {code: "BGR", name: "Bulgaria"}, 104: {code: "MMR", name: "Myanmar"}, 108: {code: "BDI", name: "Burundi"}, 112: {code: "BLR", name: "Belarus"}, 116: {code: "KHM", name: "Cambodia"}, 120: {code: "CMR", name: "Cameroon"}, 124: {code: "CAN", name: "Canada"}, 144: {code: "LKA", name: "Sri Lanka"}, 148: {code: "TCD", name: "Chad"}, 152: {code: "CHL", name: "Chile"}, 156: {code: "CHN", name: "China"}, 158: {code: "TWN", name: "Taiwan"}, 170: {code: "COL", name: "Colombia"}, 180: {code: "COD", name: "D.R. Congo"}, 184: {code: "COK", name: "Cook Islands"}, 188: {code: "CRI", name: "Costa Rica"}, 191: {code: "HRV", name: "Croatia"}, 192: {code: "CUB", name: "Cuba"}, 196: {code: "CYP", name: "Cyprus (G)"}, 197: {code: "CYP", name: "Cyprus (T)"}, 203: {code: "CZE", name: "Czech Rep."}, 208: {code: "DNK", name: "Denmark"}, 214: {code: "DOM", name: "Dominican Rep."}, 218: {code: "ECU", name: "Ecuador"}, 222: {code: "SLV", name: "El Salvador"}, 226: {code: "GNQ", name: "Eq.Guinea"}, 231: {code: "ETH", name: "Ethiopia"}, 232: {code: "ERI", name: "Eritrea"}, 233: {code: "EST", name: "Estonia"}, 246: {code: "FIN", name: "Finland"}, 250: {code: "FRA", name: "France"}, 268: {code: "GEO", name: "Georgia"}, 270: {code: "GMB", name: "Gambia"}, 275: {code: "PSE", name: "Palestine"}, 276: {code: "DEU", name: "Germany"}, 288: {code: "GHA", name: "Ghana"}, 292: {code: "GIB", name: "Gibraltar"}, 300: {code: "GRC", name: "Greece"}, 320: {code: "GTM", name: "Guatemala"}, 324: {code: "GIN", name: "Guinea"}, 328: {code: "GUY", name: "Guyana"}, 332: {code: "HTI", name: "Haiti"}, 340: {code: "HND", name: "Honduras"}, 344: {code: "HKG", name: "Hong Kong"}, 348: {code: "HUN", name: "Hungary"}, 352: {code: "ISL", name: "Iceland"}, 356: {code: "IND", name: "India"}, 360: {code: "IDN", name: "Indonesia"}, 364: {code: "IRN", name: "Iran"}, 368: {code: "IRQ", name: "Iraq"}, 372: {code: "IRL", name: "Ireland"}, 376: {code: "ISR", name: "Israel"}, 380: {code: "ITA", name: "Italy"}, 384: {code: "CIV", name: "Côte d'Ivoire"}, 388: {code: "JAM", name: "Jamaica"}, 392: {code: "JPN", name: "Japan"}, 398: {code: "KAZ", name: "Kazakhstan"}, 400: {code: "JOR", name: "Jordan"}, 404: {code: "KEN", name: "Kenya"}, 408: {code: "PRK", name: "North Korea"}, 410: {code: "KOR", name: "South Korea"}, 414: {code: "KWT", name: "Kuwait"}, 417: {code: "KGZ", name: "Kyrgyzstan"}, 418: {code: "LAO", name: "Laos"}, 422: {code: "LBN", name: "Lebanon"}, 426: {code: "LSO", name: "Lesotho"}, 428: {code: "LVA", name: "Latvia"}, 430: {code: "LBR", name: "Liberia"}, 434: {code: "LBY", name: "Libya"}, 438: {code: "LIE", name: "Liechtenstein"}, 440: {code: "LTU", name: "Lithuania"}, 442: {code: "LUX", name: "Luxembourg"}, 450: {code: "MDG", name: "Madagascar"}, 454: {code: "MWI", name: "Malawi"}, 458: {code: "MYS", name: "Malaysia"}, 466: {code: "MLI", name: "Mali"}, 470: {code: "MLT", name: "Malta"}, 474: {code: "MTQ", name: "Martinique"}, 478: {code: "MRT", name: "Mauritania"}, 480: {code: "MUS", name: "Mauritius"}, 484: {code: "MEX", name: "Mexico"}, 492: {code: "MCO", name: "Monaco"}, 496: {code: "MNG", name: "Mongolia"}, 498: {code: "MDA", name: "Moldova"}, 504: {code: "MAR", name: "Morocco"}, 508: {code: "MOZ", name: "Mozambique"}, 512: {code: "OMN", name: "Oman"}, 516: {code: "NAM", name: "Namibia"}, 524: {code: "NPL", name: "Nepal"}, 528: {code: "NLD", name: "Netherlands"}, 554: {code: "NZL", name: "New Zealand"}, 558: {code: "NIC", name: "Nicaragua"}, 562: {code: "NER", name: "Niger"}, 566: {code: "NGA", name: "Nigeria"}, 578: {code: "NOR", name: "Norway"}, 586: {code: "PAK", name: "Pakistan"}, 591: {code: "PAN", name: "Panama"}, 598: {code: "PNG", name: "Papua New Guinea"}, 600: {code: "PRY", name: "Paraguay"}, 604: {code: "PER", name: "Peru"}, 608: {code: "PHL", name: "Philippines"}, 616: {code: "POL", name: "Poland"}, 620: {code: "PTR", name: "Portugal"}, 624: {code: "GNB", name: "Guinea-Bissau"}, 626: {code: "TLS", name: "Timor-Leste"}, 630: {code: "PRI", name: "Puerto Rico"}, 634: {code: "QAT", name: "Qatar"}, 642: {code: "ROU", name: "Romania"}, 643: {code: "RUS", name: "Russia"}, 646: {code: "RWA", name: "Rwanda"}, 682: {code: "SAU", name: "Saudi Arabia"}, 686: {code: "SEN", name: "Senegal"}, 690: {code: "SYC", name: "Seychelles"}, 694: {code: "SLE", name: "Sierra Leone"}, 702: {code: "SGP", name: "Singapore"}, 703: {code: "SVK", name: "Slovakia"}, 704: {code: "VNM", name: "Viet Nam"}, 705: {code: "SVN", name: "Slovenia"}, 706: {code: "SOM", name: "Somalia"}, 710: {code: "ZAF", name: "South Africa"}, 716: {code: "ZWE", name: "Zimbabwe"}, 724: {code: "ESP", name: "Spain"}, 736: {code: "SDN", name: "Sudan"}, 740: {code: "SUR", name: "Suriname"}, 752: {code: "SWE", name: "Sweden"}, 756: {code: "CHE", name: "Switzerland"}, 760: {code: "SYR", name: "Syria"}, 762: {code: "TJK", name: "Tajikistan"}, 764: {code: "THA", name: "Thailand"}, 768: {code: "TGO", name: "Togo"}, 780: {code: "TTO", name: "Trinidad and Tobago"}, 784: {code: "ARE", name: "United Arab Emirates"}, 788: {code: "TUN", name: "Tunisia"}, 792: {code: "TUR", name: "Turkey"}, 795: {code: "TKM", name: "Turkmenistan"}, 800: {code: "UGA", name: "Uganda"}, 804: {code: "UKR", name: "Ukraine"}, 807: {code: "MKD", name: "Macedonia"}, 818: {code: "EGY", name: "Egypt"}, 826: {code: "GBR", name: "Great Britain"}, 834: {code: "TZA", name: "Tanzania"}, 840: {code: "USA", name: "United States"}, 850: {code: "VIR", name: "U.S. Virgin Islands"}, 854: {code: "BFA", name: "Burkina Faso"}, 858: {code: "URY", name: "Uruguay"}, 860: {code: "UZB", name: "Uzbekistan"}, 862: {code: "VEN", name: "Venezuela"}, 887: {code: "YEM", name: "Yemen"}, 891: {code: "SRB", name: "Serbia and Montenegro"}, 894: {code: "ZMB", name: "Zambia"}, 900: {code: "DEU", name: "West Germany"}, 901: {code: "DEU", name: "East Germany"}, 902: {code: "RUS", name: "Tambov"}, 903: {code: "RUS", name: "Moscow"}, 904: {code: "ESP", name: "Basque Country"}, 906: {code: "ESP", name: "Andalusia"}, 907: {code: "ESP", name: "Galicia"}, 909: {code: "IRL", name: "North Ireland"}, 910: {code: "ESP", name: "Valencia"}, 911: {code: "SRB", name: "Serbia"}, 912: {code: "MNE", name: "Montenegro"}, 913: {code: "HRV", name: "Srpska Republic"}, 914: {code: "BIH", name: "Bosnian Federation"}, 915: {code: "SRB", name: "Kosovo} "} };
-
-var map = new Datamap({
-  element: document.getElementById("container"),
-  fills: {
-            HIGH: '#abcdef',
-            LOW: '#123456',
-            MEDIUM: 'blue',
-            UNKNOWN: 'rgb(0,0,0)',
-            defaultFill: '#afafaf'
-        },
-        data: {
-            SWE: {
-                fillKey: 'HIGH',
-                numberOfThings: 2002
-            },
-            USA: {
-                fillKey: 'MEDIUM',
-                numberOfThings: 10381
-            }
-        },
-		geographyConfig: {
-            popupTemplate: function(geo, data) {
-                return ['<div class="hoverinfo"><strong>',
-                        'Number of things in ' + geo.properties.name,
-                        ': ' + data.numberOfThings,
-                        '</strong></div>'].join('');
-            }
-        }
-});*/
-
-	  var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 svg.setAttribute('width', '1300');
-svg.setAttribute('height', '2000');
+svg.setAttribute('height', '1200');
 svg.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", "http://www.w3.org/1999/xlink");
 document.body.appendChild(svg);
 
-d3.tsv("data-switched.tsv", function(data) { 
-	var x = 75;
+d3.tsv("data/data.tsv", function(data) { 
+	var x = 90;
 	var y = 75;
 	var n = 0;
     data.forEach(function(d) {
-       // console.log(data[1]);
-       // console.log("---");
-	  // console.log(data[1]);
 
-var shape = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-shape.setAttribute("cx", x);
-shape.setAttribute("cy", y);
-shape.setAttribute("r",  data[n].veryHappy);
-shape.setAttribute("fill", "#f7ddcb");
-shape.setAttribute("onmouseover", "evt.target.setAttribute('r', '50')");
-shape.setAttribute("onmouseout", "evt.target.setAttribute('r', '" + data[n].veryHappy + "')");
-svg.appendChild(shape);
+		var shape = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+		shape.setAttribute("cx", x);
+		shape.setAttribute("cy", y);
+		shape.setAttribute("r",  (+data[n].veryGoodHealth+28));
+		shape.setAttribute("fill", "#f7ddcb");
+		shape.setAttribute("onmouseover", "evt.target.setAttribute('r', '" + (+data[n].veryGoodHealth+30) + "')");
+		shape.setAttribute("onclick", "alert('Very happy: " + data[n].veryHappy + "%\\nRather happy: " + data[n].ratherHappy + "%\\nNot very happy: " + data[n].notVeryHappy + "%\\nNot at all happy: " + data[n].notAtAllHappy + "%\\n\\nVery good health: " + data[n].veryGoodHealth + "%\\nGood health: " + data[n].goodHealth + "%\\nFair health: " + data[n].fairHealth + "%\\nPoor health: " + data[n].poorHealth + "%')");
+		shape.setAttribute("onmouseout", "evt.target.setAttribute('r', '" + (+data[n].veryGoodHealth+28) + "')");
+		svg.appendChild(shape);
 
-// Smile
-var randomNumber = 0;
-while(randomNumber <= 0.95){var randomNumber = Math.random();}
+		// Smile
 
-var smile = document.createElementNS("http://www.w3.org/2000/svg", "path");
-var coordinateString = "M" + (x-12) + "," + (y+15) + " C" + (x-5) + "," + (y+30)*randomNumber + " " + (x+5) + "," + (y+30)*randomNumber + " " + (x+12) + "," + (y+15) + "";
-smile.setAttributeNS(null, "d", coordinateString);
+		var smileData = 0;
+		var smileConst = 5;
+		
+		if(+data[n].veryHappy > +data[n].ratherHappy && +data[n].veryHappy > +data[n].notVeryHappy && +data[n].veryHappy > +data[n].notAtAllHappy){
+			smileData = -15+(+data[n].veryHappy/smileConst)+(+data[n].ratherHappy/smileConst)-(+data[n].notVeryHappy/smileConst)-(+data[n].notAtAllHappy/smileConst);
+		}
+		if(+data[n].ratherHappy > +data[n].veryHappy && +data[n].ratherHappy > +data[n].notVeryHappy && +data[n].ratherHappy > +data[n].notAtAllHappy){
+			smileData = -25+(+data[n].veryHappy/smileConst)+(+data[n].ratherHappy/smileConst)-(+data[n].notVeryHappy/smileConst)-(+data[n].notAtAllHappy/smileConst);
+		}
+		if(+data[n].notVeryHappy > +data[n].veryHappy && +data[n].notVeryHappy > +data[n].ratherHappy && +data[n].notVeryHappy > +data[n].notAtAllHappy){
+			smileData = -28+(+data[n].veryHappy/smileConst)+(+data[n].ratherHappy/smileConst)-(+data[n].notVeryHappy/smileConst)-(+data[n].notAtAllHappy/smileConst);
+		}
+		if(+data[n].notAtAllHappy > +data[n].veryHappy && +data[n].notAtAllHappy > +data[n].ratherHappy && +data[n].notAtAllHappy > +data[n].notVeryHappy){
+			smileData = -30+(+data[n].veryHappy/smileConst)+(+data[n].ratherHappy/smileConst)-(+data[n].notVeryHappy/smileConst)-(+data[n].notAtAllHappy/smileConst);
+		}
 
-svg.appendChild(smile);
+		var smile = document.createElementNS("http://www.w3.org/2000/svg", "path");
+		var coordinateString = "M" + (x-12) + "," + (y+15) + " C" + (x-5) + "," + (y+30+smileData) + " " + (x+5) + "," + (y+30+smileData) + " " + (x+12) + "," + (y+15) + "";
+		smile.setAttributeNS(null, "d", coordinateString);
 
-// Eyes
+		svg.appendChild(smile);
 
-var eye1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
-var coordinateString = "M" + (x-23) + "," + (y-15) + " C" + (x-18) + "," + (y-25) + " " + (x-8) + "," + (y-25) + " " + (x-3) + "," + (y-15) + "";
-eye1.setAttributeNS(null, "d", coordinateString);
+		// Eyes
 
-svg.appendChild(eye1);
+		var eye1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+		var coordinateString = "M" + (x-23) + "," + (y-15) + " C" + (x-18) + "," + (y-25) + " " + (x-8) + "," + (y-25) + " " + (x-3) + "," + (y-15) + "";
+		eye1.setAttributeNS(null, "d", coordinateString);
 
-var eye2 = document.createElementNS("http://www.w3.org/2000/svg", "path");
-var coordinateString = "M" + (x+3) + "," + (y-15) + " C" + (x+8) + "," + (y-25) + " " + (x+18) + "," + (y-25) + " " + (x+23) + "," + (y-15) + "";
-eye2.setAttributeNS(null, "d", coordinateString);
+		svg.appendChild(eye1);
 
-svg.appendChild(eye2);
+		var eye2 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+		var coordinateString = "M" + (x+3) + "," + (y-15) + " C" + (x+8) + "," + (y-25) + " " + (x+18) + "," + (y-25) + " " + (x+23) + "," + (y-15) + "";
+		eye2.setAttributeNS(null, "d", coordinateString);
 
-// Texts
+		svg.appendChild(eye2);
 
-var newText = document.createElementNS("http://www.w3.org/2000/svg","text");
+		// Texts
 
-newText.setAttributeNS(null,"x",x-20);     
-newText.setAttributeNS(null,"y",y+75); 
-newText.setAttributeNS(null,"font-size","11");
+		var newText = document.createElementNS("http://www.w3.org/2000/svg","text");
 
-var textNode = document.createTextNode(data[n].country);
-newText.appendChild(textNode);
-svg.appendChild(newText);
+		newText.setAttributeNS(null,"x",x);     
+		newText.setAttributeNS(null,"y",y+100); 
+		newText.setAttributeNS(null,"font-size","11");
 
-var textBox = document.createElement("span");
-textBox.innerHTML = data[n].country;
-shape.appendChild(textBox);
+		var textNode = document.createTextNode(data[n].country);
+		newText.appendChild(textNode);
+		svg.appendChild(newText);
 
-
-if(x >= 1200){
-	x = 75;
-	y = y + 150;
-}
-else {x = x + 100;}
-n++;
-	  
-	  
-	  
+		if(x >= 1100){
+			x = 90;
+			y = y + 200;
+		}
+		else{
+			x = x + 100;
+		}
+		n++; 
    });
-    //console.log(data[0]);
 });
 
 
@@ -218,56 +150,6 @@ n++;
 
 </script>
 
+<p>heej</p>
 
-
-<!-- <script>
-
-var width = 1366,
-    height = 500;
-
-var color = d3.scale.category20();
-
-var force = d3.layout.force()
-    .charge(-120)
-    .linkDistance(30)
-    .size([width, height]);
-
-var svg = d3.select("body").append("svg")
-    .attr("width", width)
-    .attr("height", height);
-
-d3.json("group-data.json", function(error, graph) {
-  force
-      .nodes(graph.nodes)
-      .links(graph.links)
-      .start();
-
-  var link = svg.selectAll(".link")
-      .data(graph.links)
-    .enter().append("line")
-      .attr("class", "link")
-      .style("stroke-width", function(d) { return Math.sqrt(d.value); });
-
-  var node = svg.selectAll(".node")
-      .data(graph.nodes)
-    .enter().append("circle")
-      .attr("class", "node")
-      .attr("r", 8)
-      .style("fill", function(d) { return color(d.group); })
-      .call(force.drag);
-
-  node.append("title")
-      .text(function(d) { return d.name; });
-
-  force.on("tick", function() {
-    link.attr("x1", function(d) { return d.source.x; })
-        .attr("y1", function(d) { return d.source.y; })
-        .attr("x2", function(d) { return d.target.x; })
-        .attr("y2", function(d) { return d.target.y; });
-
-    node.attr("cx", function(d) { return d.x; })
-        .attr("cy", function(d) { return d.y; });
-  });
-});
-
-</script> -->
+</html>
